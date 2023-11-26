@@ -5,7 +5,7 @@ This Shiny app provides buyers, sellers and investors insights into the New York
 The sales dashboard includes:
 * An interactive choropleth (“heatmap”) map, in which the user can select the inputs (property type (all properties, condo, co-op, and single-family), time, sales metric) to render the map.
 * Historical trends, in which the user can select multiple boroughs, submarkets or neighborhoods for a selected property type and sales metric for comparison.
-* 12-month median listing (“asking”) sales price forecast for a selected neighborhood or submarket.
+* 12-month median listing (“asking”) sales price forecast for a selected neighborhood or submarket, using Prophet, Meta's machine learning time series forecast algorithm.
 * Mortgage calculation to estimate the monthly payment on a 30-year mortgage for a selected borough, submarket, or neighborhood, and property type, given the median listing (“asking”) price, current benchmark mortgage interest rate for New York and a 20% down payment.
 
 The rental dashboard includes: 
