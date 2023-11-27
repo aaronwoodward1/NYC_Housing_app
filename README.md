@@ -8,6 +8,8 @@ The sales dashboard includes:
 * 12-month median listing (“asking”) sales price forecast for a selected neighborhood or submarket, using Prophet, Meta's machine learning time series forecast algorithm.
 * Mortgage calculation to estimate the monthly payment on a 30-year mortgage for a selected borough, submarket, or neighborhood, and property type, given the median listing (“asking”) price, current benchmark mortgage interest rate for New York and a 20% down payment.
 
+NYC_Housing_Sales_demo.mov
+
 The rental dashboard includes: 
 * An interactive choropleth (“heatmap”) map, in which the user can select the inputs (rental type (all rentals, studio, 1 bedroom, 2 bedroom, 3+ bedroom, time, rental metric) to render the map.
 * Historical trends, in which the user can select multiple boroughs, submarkets or neighborhoods for a selected rental type and rental metric for comparison.
