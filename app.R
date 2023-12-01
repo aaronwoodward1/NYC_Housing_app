@@ -12,11 +12,14 @@ library(plotly)
 library(sf)
 library(s2)
 library(geojsonsf)
-#library(lubridate)
+library(lubridate)
 library(scales)
 library(timetk)
 library(tidyverse)
 library(trelliscopejs)
+library(modeltime)
+library(tidymodels)
+library(shinyWidgets)
 
 ###############################################################################
 #                                                                             #
@@ -24,13 +27,12 @@ library(trelliscopejs)
 #                                                                             #
 ###############################################################################
 #Setting working directory
-setwd("/Users/aaronwoodward/Desktop/Datasets/Cities/NYC/Streeteasy_data/Master_report")
-
+#setwd("/Users/aaronwoodward/Desktop/Datasets/Cities/NYC/Streeteasy_data/Master_report")
+#"https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/ZillowNeighborhoods-NY.shp"
 
 #WORKING WITH NEIGHBORHOOD SHAPEFILE
 #Reading the shapefile into R.
 nyc_hoods_sf <- st_read(dsn  = "Zillow_neighborhoods/ZillowNeighborhoods-NY.shp")
-#nyc_hoods_sf <- st_read(dsn  = "ZillowNeighborhoods-NY.shp")
 
 #Assigning the coordinate reference system or CRS
 nyc_hoods_sf <- st_transform(nyc_hoods_sf, 4326)
@@ -1152,8 +1154,14 @@ sales_ts <- median_ask_price_all %>%
 
 ui <- fluidPage(
   
+  titlePanel(div('StreetEasy New York City Housing Sales and Rental Dashboard', style = 'color: white')),
+  
+  setBackgroundImage(src = "https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/NYC_brownstone.png", shinydashboard = FALSE),
+  
+  tags$head(tags$style('body {color:#0c18b3}')),
+  
   # Application title
-  titlePanel("StreetEasy New York City Housing Sales and Rental Dashboard"),
+  #titlePanel(div('StreetEasy New York City Housing Sales and Rental Dashboard', style = 'color: white')),
   
  tabsetPanel(
     tabPanel("Sales Data",
@@ -1201,10 +1209,10 @@ ui <- fluidPage(
                   ),
                
                 mainPanel(width = 9,
-                         fluidRow(column(width = 12, h4("Interactive Map", align='left'),leafletOutput(outputId = "sales_map", width = 1000, height=350))),
-                         fluidRow(column(width = 12, h4("Historical Sales Trends", align='left'), plotlyOutput("sales_history_plot"))),
-                         fluidRow(column(width = 12, h4("Listing (Asking) price forecast"), align='left'), plotlyOutput("forecast")),
-                         fluidRow(column(width = 12, h4("Estimated Monthly Mortgage Payment", align='left'),
+                         fluidRow(column(width = 12, style = "background-color:white;", h4("Interactive Map", align='left'),leafletOutput(outputId = "sales_map", width = 1000, height=350))),
+                         fluidRow(column(width = 12, style = "background-color:white;", h4("Historical Sales Trends", align='left'), plotlyOutput("sales_history_plot"))),
+                         fluidRow(column(width = 12, style = "background-color:white;", plotlyOutput("forecast"))),
+                         fluidRow(column(width = 12, style = "background-color:white;", h4("Estimated Monthly Mortgage Payment", align='left'),
                                          h5("Based on median listing (asking) price, benchmark mortgage rate in New York, and down payment of 20%."), 
                                          uiOutput("mortgage")))
                )
@@ -1245,9 +1253,9 @@ ui <- fluidPage(
       ),
       
       mainPanel(width = 9,
-        fluidRow(column(width = 12, h4("Interactive Map", align='left'),leafletOutput(outputId = "rent_map", width = 1000, height=350))),
-        fluidRow(column(width = 12, h4("Historical Asking Rent and Rental Inventory Trends", align='left'), plotlyOutput("rent_history_plot"))),
-        fluidRow(column(width = 12, h4("Affordability of New York City Neighborhoods", align='left'),h5("Affordability is based on the median household income in New York City of $74,694 in 2022. Bubble sizes reflect median asking rent as of September 2023.", align='left'), plotlyOutput("rent_afford_plot"))) #h6("Affordability is based on the median household income in New York City of $74,694 in 2022", align='left'), 
+        fluidRow(column(width = 12, style = "background-color:white;", h4("Interactive Map", align='left'),leafletOutput(outputId = "rent_map", width = 1000, height=350))),
+        fluidRow(column(width = 12, style = "background-color:white;", h4("Historical Asking Rent and Rental Inventory Trends", align='left'), plotlyOutput("rent_history_plot"))),
+        fluidRow(column(width = 12, style = "background-color:white;", h4("Affordability of New York City Neighborhoods", align='left'),h5("Affordability is based on the median household income in New York City of $74,694 in 2022. Bubble sizes reflect median asking rent as of September 2023.", align='left'), plotlyOutput("rent_afford_plot"))) #h6("Affordability is based on the median household income in New York City of $74,694 in 2022", align='left'), 
         )
       )
     )
@@ -1281,7 +1289,7 @@ server <- function(input, output, session){
     addPolygons(stroke = FALSE, smoothFactor = 0.3, fillOpacity = 0.65,
                 fillColor = ~pal(value),
                 label = ~paste0(areaName, ": ", formatC(value, big.mark = ","))) %>%
-    addLegend(pal = pal, values = ~rent_map_data()$value, opacity = 0.65, position = "bottomright",
+    addLegend(pal = pal, values = ~rent_map_data()$value, opacity = 0.65, position = "bottomleft",
               title = NULL)
   
     })
@@ -1316,7 +1324,7 @@ server <- function(input, output, session){
                 hovertemplate = paste0(
                   "Neighborhood: %{text}</b><br>",
                   "Percent of household income spent on rent: %{x:.1%}<br>",
-                  "Total available rental units (Rental inventory): %{y:0,0f}<br>",
+                  "Total available rental units (Rental inventory): %{y:,.0f}<br>",
                   'Median asking rent: $%{hovertext}'
                 )) %>%
                 #hovertemplate = paste0(
@@ -1353,9 +1361,11 @@ server <- function(input, output, session){
        setView(-73.9, 40.7, zoom = 10) %>%
        addPolygons(stroke = FALSE, smoothFactor = 0.3, fillOpacity = 0.65,
                    fillColor = ~pal(value),
-                   label = ~paste0(areaName, ": ", formatC(value, big.mark = ","))) %>%
-       addLegend(pal = pal, values = ~sales_map_data()$value, opacity = 0.65, position = "bottomright",
-                 title = NULL)
+                   label = ~paste0(areaName, ": ", prettyNum(value, big.mark = ","))) %>%
+                   # label = ~paste0(areaName, ": ", "%{value:$,.0f"})) %>%
+       addLegend(pal = pal, values = ~sales_map_data()$value, opacity = 0.65, position = "bottomleft",
+                   title = NULL) #%>%
+       # hovertemplate = paste("%{sales_map_data()$areaName}: %{sales_map_data()$value:$,.0f}")
      
    })
    
@@ -1392,7 +1402,7 @@ server <- function(input, output, session){
    # })
    
    output$mortgage <- renderUI({
-     HTML(paste0(
+     HTML(paste0("<b>",
         "Area: ", input$mort_area,
         "<br>",
         "Type of property: ", input$mort_property,
@@ -1403,7 +1413,8 @@ server <- function(input, output, session){
         "<br>",
         "30-year benchmark mortgage interest rate: ", 7.85,"%",
         "<br>",
-        "Estimated monthly payment: $", formatC(mortgage_data()$monthly_mort_payment[2], format="f", digits=2, big.mark=",")
+        "Estimated monthly payment: $", formatC(mortgage_data()$monthly_mort_payment[2], format="f", digits=2, big.mark=","),
+        "</b>"
      ))
    })
    
@@ -1415,35 +1426,7 @@ server <- function(input, output, session){
    forecast_data <- reactive({
      as.data.frame(filter(sales_ts, areaName == input$forecast_area))
    })
-   
-   # # Train-Test split
-   # splits <- time_series_split(forecast_data(), 
-   #                             assess = "48 months",
-   #                             cumulative = TRUE
-   # )
-   # 
-   # # Forecast: Using Prophet time series model
-   # 
-   # model_prophet <- prophet_reg(
-   #   seasonality_yearly = TRUE
-   # ) %>%
-   #   set_engine("prophet") %>%
-   #   fit(value ~ time, training(splits))
-   # 
-   # # Calibrate
-   # calib_tbl <- model_tbl %>%
-   #   modeltime_calibrate(testing(splits))
-   # 
-   # future_forecast_tbl <- calib_tbl %>%
-   #   modeltime_refit(forecast_data()) %>%
-   #   modeltime_forecast(
-   #     h = "12 months",
-   #     actual_data = forecast_data()
-   #   )
-   # 
-   # forecast_plot <-future_forecast_tbl %>%
-   #   plot_modeltime_forecast()
-   # 
+  
    # Plotting forecast
    output$forecast <- renderPlotly({
      # Train-Test split
@@ -1475,8 +1458,8 @@ server <- function(input, output, session){
        )
      
      future_forecast_tbl %>%
-       plot_modeltime_forecast()
-     
+       plot_modeltime_forecast(., .title = paste0("12-month listing price forecast for ", input$forecast_area), .facet_scales = "free_y", .legend_show = FALSE)
+     #title = paste0("12-month listing price forecast for ", input$forecast_area)
    })
    
    
