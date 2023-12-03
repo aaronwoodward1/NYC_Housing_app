@@ -9,6 +9,7 @@ The sales dashboard includes:
 * Mortgage calculation to estimate the monthly payment on a 30-year mortgage for a selected borough, submarket, or neighborhood, and property type, given the median listing (“asking”) price, current benchmark mortgage interest rate for New York and a 20% down payment.
 
 ![sales_demo1](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYm5hYjlnbGZmMWVva3J3aXp5aWlsdnpobnRrMmY5cTA2eXg3Y284NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/inDsdZOQVFxsX7PAVs/giphy.gif) ![sales_demo2](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHF5enpobWRtcG1ha3I1cWN3OGo5aHZyZGM0dnZraXgwcmJjdGdiMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/vpWW63XbxZ2T7lO0Ir/giphy.gif)
+![sales_demo3](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzR1cXEyMnh6Z2xneGE1a2l2d21xb20xMm9iYTFveWZ6OTUzdWxvbSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ywubiJ907EGHP3sF8t/giphy.gif) ![sales_demo4](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExc2RpMWZ1M3Q0b3lxcHVwdDQwN3Vwc20yczZmY2QxNDA1NGd6ZDRmMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/58Z6oa4K0TKe2etvZq/giphy.gif)
 
 The rental dashboard includes: 
 * An interactive choropleth (“heatmap”) map, in which the user can select the inputs (rental type (all rentals, studio, 1 bedroom, 2 bedroom, 3+ bedroom, time, rental metric) to render the map.
