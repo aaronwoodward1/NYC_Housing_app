@@ -20,6 +20,7 @@ library(trelliscopejs)
 library(modeltime)
 library(tidymodels)
 library(shinyWidgets)
+#library(rsconnect)
 
 ###############################################################################
 #                                                                             #
@@ -1132,10 +1133,16 @@ properties <- factor(sales_sf$type, levels = c("All properties", "Condo", "Co-Op
 
 mort_rate = 0.0785 #Annual rate for 30-year fixed mortgage
 
+
+# median_ask_df <- rbind(median_ask_price_all,
+#                      median_ask_price_condo,
+#                      median_ask_price_coop,
+#                      median_ask_price_sf)
+
 mortgage_df <- mutate(sales_df, 
                       down_payment = sales_df$value*0.2,
                       monthly_mort_payment = (sales_df$value*.80)*(mort_rate/12)/ (1-((1 + mort_rate/12)^(-360)))) %>%
-  filter(., time == "2023-09-01", !is.na(value)) 
+  filter(., time == "2023-09-01", metric == "Median Asking Price", !is.na(value)) 
 
 # Cleaning time series data
 sales_ts <- median_ask_price_all %>% 
@@ -1200,7 +1207,7 @@ ui <- fluidPage(
                   
                   h4("For Mortgage Calculation"),
                   selectInput("mort_area", "Select Area:",
-                              choices = unique(mortgage_df$areaName),
+                              choices = unique(sort(mortgage_df$areaName)),
                               selected = "NYC"),
                   selectInput("mort_property", "Type of Property:",
                               choices = levels(factor(properties)),
@@ -1285,7 +1292,7 @@ server <- function(input, output, session){
     rent_map_data() %>%
     leaflet() %>%
     addProviderTiles("CartoDB.Positron") %>%
-    setView(-73.9, 40.7, zoom = 10) %>%
+    setView(-74.0, 40.7, zoom = 10) %>%
     addPolygons(stroke = FALSE, smoothFactor = 0.3, fillOpacity = 0.65,
                 fillColor = ~pal(value),
                 label = ~paste0(areaName, ": ", formatC(value, big.mark = ","))) %>%
@@ -1358,7 +1365,7 @@ server <- function(input, output, session){
      sales_map_data() %>%
        leaflet() %>%
        addProviderTiles("CartoDB.Positron") %>%
-       setView(-73.9, 40.7, zoom = 10) %>%
+       setView(-74.0, 40.7, zoom = 10) %>%
        addPolygons(stroke = FALSE, smoothFactor = 0.3, fillOpacity = 0.65,
                    fillColor = ~pal(value),
                    label = ~paste0(areaName, ": ", prettyNum(value, big.mark = ","))) %>%
@@ -1407,13 +1414,13 @@ server <- function(input, output, session){
         "<br>",
         "Type of property: ", input$mort_property,
         "<br>",
-        "Recent median listing (asking) price: $", formatC(mortgage_data()$value[2], format="f", digits=0, big.mark=","),
+        "Recent median listing (asking) price: $", formatC(mortgage_data()$value, format="f", digits=0, big.mark=","),
         "<br>",
-        "Estimated down payment: $", formatC(mortgage_data()$down_payment[2], format="f", digits=2, big.mark=","),
+        "Estimated down payment: $", formatC(mortgage_data()$down_payment, format="f", digits=2, big.mark=","),
         "<br>",
         "30-year benchmark mortgage interest rate: ", 7.85,"%",
         "<br>",
-        "Estimated monthly payment: $", formatC(mortgage_data()$monthly_mort_payment[2], format="f", digits=2, big.mark=","),
+        "Estimated monthly payment: $", formatC(mortgage_data()$monthly_mort_payment, format="f", digits=2, big.mark=","),
         "</b>"
      ))
    })
@@ -1466,3 +1473,5 @@ server <- function(input, output, session){
 }
 
 shinyApp(ui, server)
+
+#"</br>",h4("Red line is forecasted listing price using Meta's Prophet time series model")
