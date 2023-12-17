@@ -1,16 +1,10 @@
 library(dplyr)
 library(tidyverse)
 library(leaflet)
-library(sp)
-#library(ggmap)
-#library(maptools)
-library(broom)
-library(httr)
-#library(rgdal)
+#library(sp)
 library(plotly)
-#library(ggplot2)
 library(sf)
-library(s2)
+#library(s2)
 library(geojsonsf)
 library(lubridate)
 library(scales)
@@ -438,155 +432,155 @@ nyc_hoods_clean <- nyc_hoods_clean %>%
 
 
 # Asking rent
-rent_ask_all = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/medianAskingRent_All.csv", stringsAsFactors = FALSE) %>%
+rent_ask_all = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/medianAskingRent_All.csv", stringsAsFactors = FALSE) %>%
   #  filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>% 
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Median Asking Rent",
          type = "All Rentals" ) %>%
-  filter(., time >= as.Date("2018-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-rent_ask_studio = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/medianAskingRent_Studio.csv", stringsAsFactors = FALSE) %>%
+rent_ask_studio = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/medianAskingRent_Studio.csv", stringsAsFactors = FALSE) %>%
   #  filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Median Asking Rent",
          type = "Studio") %>%
-  filter(., time >= as.Date("2018-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-rent_ask_onebd = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/medianAskingRent_OneBd.csv", stringsAsFactors = FALSE) %>%
+rent_ask_onebd = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/medianAskingRent_OneBd.csv", stringsAsFactors = FALSE) %>%
   #  filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Median Asking Rent",
          type = "1 Bedroom") %>%
-  filter(., time >= as.Date("2018-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-rent_ask_twobd = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/medianAskingRent_TwoBd.csv", stringsAsFactors = FALSE) %>%
+rent_ask_twobd = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/medianAskingRent_TwoBd.csv", stringsAsFactors = FALSE) %>%
   #  filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Median Asking Rent",
          type = "2 Bedrooms") %>%
-  filter(., time >= as.Date("2018-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-rent_ask_threeplusbd = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/medianAskingRent_ThreePlusBd.csv", stringsAsFactors = FALSE) %>%
+rent_ask_threeplusbd = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/medianAskingRent_ThreePlusBd.csv", stringsAsFactors = FALSE) %>%
   #  filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Median Asking Rent",
          type = "3+ Bedrooms") %>%
-  filter(., time >= as.Date("2018-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
 #Rental Inventory
-rent_inventory_all = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/rentalInventory_All.csv", stringsAsFactors = FALSE) %>%
+rent_inventory_all = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/rentalInventory_All.csv", stringsAsFactors = FALSE) %>%
   #  filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Rental Inventory",
          type = "All Rentals" ) %>%
-  filter(., time >= as.Date("2018-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-rent_inventory_studio = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/rentalInventory_Studio.csv", stringsAsFactors = FALSE) %>%
+rent_inventory_studio = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/rentalInventory_Studio.csv", stringsAsFactors = FALSE) %>%
   #  filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Rental Inventory",
          type = "Studio" ) %>%
-  filter(., time >= as.Date("2018-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-rent_inventory_onebd = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/rentalInventory_OneBd.csv", stringsAsFactors = FALSE) %>%
+rent_inventory_onebd = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/rentalInventory_OneBd.csv", stringsAsFactors = FALSE) %>%
   #  filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Rental Inventory",
          type = "1 Bedroom" ) %>%
-  filter(., time >= as.Date("2018-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-rent_inventory_twobd = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/rentalInventory_TwoBd.csv", stringsAsFactors = FALSE) %>%
+rent_inventory_twobd = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/rentalInventory_TwoBd.csv", stringsAsFactors = FALSE) %>%
   #  filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Rental Inventory",
          type = "2 Bedrooms" ) %>%
-  filter(., time >= as.Date("2018-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-rent_inventory_threeplusbd = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/rentalInventory_ThreePlusBd.csv", stringsAsFactors = FALSE) %>%
+rent_inventory_threeplusbd = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/rentalInventory_ThreePlusBd.csv", stringsAsFactors = FALSE) %>%
   #  filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Rental Inventory",
          type = "3+ Bedrooms" ) %>%
-  filter(., time >= as.Date("2018-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
 # Creating a larger dataframe "rent_df" by combining all of these smaller dataframes via row bind (rbind) function.
@@ -657,429 +651,417 @@ nyc_rent_afford_df <- left_join(nyc_rent_afford_df, nyc_rent_inv_df, by=c("areaN
 ###############################################################################
 
 #Days on Market
-days_on_mkt_all = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/daysOnMarket_All.csv", stringsAsFactors = FALSE) %>%
+days_on_mkt_all = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/daysOnMarket_All.csv", stringsAsFactors = FALSE) %>%
   #  #filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Days on market",
          type = "All properties" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-days_on_mkt_condo = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/daysOnMarket_Condo.csv", stringsAsFactors = FALSE) %>%
+days_on_mkt_condo = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/daysOnMarket_Condo.csv", stringsAsFactors = FALSE) %>%
   #  #filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Days on market",
          type = "Condo" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-days_on_mkt_coop = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/daysOnMarket_Coop.csv", stringsAsFactors = FALSE) %>%
+days_on_mkt_coop = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/daysOnMarket_Coop.csv", stringsAsFactors = FALSE) %>%
   #  #filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Days on market",
          type = "Co-Op" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-days_on_mkt_sf = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/daysOnMarket_Sfr.csv", stringsAsFactors = FALSE) %>%
+days_on_mkt_sf = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/daysOnMarket_Sfr.csv", stringsAsFactors = FALSE) %>%
   #  #filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Days on market",
-         type = "Single-Family" ) %>%
-  #filter(., time >= as.Date("2018-01-01")) %>% 
+         type = "Single-Family/Townhouse" ) %>%
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
 # Median Asking Price
-median_ask_price_all = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/medianAskingPrice_All.csv", stringsAsFactors = FALSE) %>%
+median_ask_price_all = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/medianAskingPrice_All.csv", stringsAsFactors = FALSE) %>%
   #  #filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Median Asking Price",
          type = "All properties" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-median_ask_price_condo = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/medianAskingPrice_Condo.csv", stringsAsFactors = FALSE) %>%
+median_ask_price_condo = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/medianAskingPrice_Condo.csv", stringsAsFactors = FALSE) %>%
   #  #filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Median Asking Price",
          type = "Condo" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-median_ask_price_coop = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/medianAskingPrice_Coop.csv", stringsAsFactors = FALSE) %>%
+median_ask_price_coop = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/medianAskingPrice_Coop.csv", stringsAsFactors = FALSE) %>%
   #  #filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Median Asking Price",
          type = "Co-Op" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-median_ask_price_sf = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/medianAskingPrice_Sfr.csv", stringsAsFactors = FALSE) %>%
+median_ask_price_sf = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/medianAskingPrice_Sfr.csv", stringsAsFactors = FALSE) %>%
   #  #filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Median Asking Price",
-         type = "Single-Family" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+         type = "Single-Family/Townhouse" ) %>%
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-median_sales_price_all = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/medianSalesPrice_All.csv", stringsAsFactors = FALSE) %>%
+median_sales_price_all = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/medianSalesPrice_All.csv", stringsAsFactors = FALSE) %>%
   #  #filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Median Sales Price",
          type = "All properties" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-median_sales_price_condo = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/medianSalesPrice_Condo.csv", stringsAsFactors = FALSE) %>%
+median_sales_price_condo = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/medianSalesPrice_Condo.csv", stringsAsFactors = FALSE) %>%
   #  #filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Median Sales Price",
          type = "Condo" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-median_sales_price_coop = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/medianSalesPrice_Coop.csv", stringsAsFactors = FALSE) %>%
+median_sales_price_coop = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/medianSalesPrice_Coop.csv", stringsAsFactors = FALSE) %>%
   #  #filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Median Sales Price",
          type = "Co-Op" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-median_sales_price_sf = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/medianSalesPrice_Sfr.csv", stringsAsFactors = FALSE) %>%
+median_sales_price_sf = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/medianSalesPrice_Sfr.csv", stringsAsFactors = FALSE) %>%
   #  #filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Median Sales Price",
-         type = "Single-Family" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+         type = "Single-Family/Townhouse" ) %>%
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
 # Share of Price Cut
-price_cut_share_all = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/priceCutShare_All.csv", stringsAsFactors = FALSE) %>%
+price_cut_share_all = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/priceCutShare_All.csv", stringsAsFactors = FALSE) %>%
   #  #filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Share of Price Cut",
          type = "All properties" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-price_cut_share_condo = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/priceCutShare_Condo.csv", stringsAsFactors = FALSE) %>%
+price_cut_share_condo = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/priceCutShare_Condo.csv", stringsAsFactors = FALSE) %>%
   #  #filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Share of Price Cut",
          type = "Condo" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-price_cut_share_coop = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/priceCutShare_Coop.csv", stringsAsFactors = FALSE) %>%
+price_cut_share_coop = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/priceCutShare_Coop.csv", stringsAsFactors = FALSE) %>%
   #  #filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Share of Price Cut",
          type = "Co-Op" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-price_cut_share_sf = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/priceCutShare_Sfr.csv", stringsAsFactors = FALSE) %>%
+price_cut_share_sf = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/priceCutShare_Sfr.csv", stringsAsFactors = FALSE) %>%
   #  #filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Share of Price Cut",
-         type = "Single-Family" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+         type = "Single-Family/Townhouse" ) %>%
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-recorded_sales_vol_all = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/recordedSalesVolume_All.csv", stringsAsFactors = FALSE) %>%
+recorded_sales_vol_all = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/recordedSalesVolume_All.csv", stringsAsFactors = FALSE) %>%
   #  #filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Sales Volume",
          type = "All properties" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-recorded_sales_vol_condo = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/recordedSalesVolume_Condo.csv", stringsAsFactors = FALSE) %>%
+recorded_sales_vol_condo = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/recordedSalesVolume_Condo.csv", stringsAsFactors = FALSE) %>%
   #  #filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Sales Volume",
          type = "Condo" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-recorded_sales_vol_coop = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/recordedSalesVolume_Coop.csv", stringsAsFactors = FALSE) %>%
+recorded_sales_vol_coop = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/recordedSalesVolume_Coop.csv", stringsAsFactors = FALSE) %>%
   #  #filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Sales Volume",
          type = "Co-Op" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-recorded_sales_vol_sf = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/recordedSalesVolume_Sfr.csv", stringsAsFactors = FALSE) %>%
+recorded_sales_vol_sf = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/recordedSalesVolume_Sfr.csv", stringsAsFactors = FALSE) %>%
   #  #filter(., 
   #         areaType == "neighborhood" | areaType == "borough"
   #  ) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Sales Volume",
-         type = "Single-Family" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+         type = "Single-Family/Townhouse" ) %>%
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
 # Sale to List Ratio
-sale_list_ratio_all = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/saleListRatio_All.csv", stringsAsFactors = FALSE) %>%
-  #  #filter(., 
-  #         areaType == "neighborhood" | areaType == "borough"
-  #  ) %>%
-  gather(., 
-         key = "yearMonth", 
-         value = "value", 
-         X2010.01:X2023.09) %>%
-  mutate(., 
-         time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
-         metric = "Sale to List Ratio",
-         type = "All properties" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
-  select(., areaName, areaType, Borough, time, type, metric, value)
-
-sale_list_ratio_condo = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/saleListRatio_Condo.csv", stringsAsFactors = FALSE) %>%
-  #  #filter(., 
-  #         areaType == "neighborhood" | areaType == "borough"
-  #  ) %>%
-  gather(., 
-         key = "yearMonth", 
-         value = "value", 
-         X2010.01:X2023.09) %>%
-  mutate(., 
-         time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
-         metric = "Sale to List Ratio",
-         type = "Condo" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
-  select(., areaName, areaType, Borough, time, type, metric, value)
-
-sale_list_ratio_coop = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/saleListRatio_Coop.csv", stringsAsFactors = FALSE) %>%
-  #  #filter(., 
-  #         areaType == "neighborhood" | areaType == "borough"
-  #  ) %>%
-  gather(., 
-         key = "yearMonth", 
-         value = "value", 
-         X2010.01:X2023.09) %>%
-  mutate(., 
-         time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
-         metric = "Sale to List Ratio",
-         type = "Co-Op" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
-  select(., areaName, areaType, Borough, time, type, metric, value)
-
-sale_list_ratio_sf = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/saleListRatio_Sfr.csv", stringsAsFactors = FALSE) %>%
-  #  #filter(., 
-  #         areaType == "neighborhood" | areaType == "borough"
-  #  ) %>%
-  gather(., 
-         key = "yearMonth", 
-         value = "value", 
-         X2010.01:X2023.09) %>%
-  mutate(., 
-         time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
-         metric = "Sale to List Ratio",
-         type = "Single-Family" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
-  select(., areaName, areaType, Borough, time, type, metric, value)
+# sale_list_ratio_all = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/saleListRatio_All.csv", stringsAsFactors = FALSE) %>%
+#   #  #filter(., 
+#   #         areaType == "neighborhood" | areaType == "borough"
+#   #  ) %>%
+#   gather(., 
+#          key = "yearMonth", 
+#          value = "value", 
+#          X2010.01:X2023.11) %>%
+#   mutate(., 
+#          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
+#          metric = "Sale to List Ratio",
+#          type = "All properties" ) %>%
+#   filter(., time >= as.Date("2018-11-01")) %>% 
+#   select(., areaName, areaType, Borough, time, type, metric, value)
+# 
+# sale_list_ratio_condo = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/saleListRatio_Condo.csv", stringsAsFactors = FALSE) %>%
+#   #  #filter(., 
+#   #         areaType == "neighborhood" | areaType == "borough"
+#   #  ) %>%
+#   gather(., 
+#          key = "yearMonth", 
+#          value = "value", 
+#          X2010.01:X2023.11) %>%
+#   mutate(., 
+#          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
+#          metric = "Sale to List Ratio",
+#          type = "Condo" ) %>%
+#   filter(., time >= as.Date("2018-11-01")) %>% 
+#   select(., areaName, areaType, Borough, time, type, metric, value)
+# 
+# sale_list_ratio_coop = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/saleListRatio_Coop.csv", stringsAsFactors = FALSE) %>%
+#   #  #filter(., 
+#   #         areaType == "neighborhood" | areaType == "borough"
+#   #  ) %>%
+#   gather(., 
+#          key = "yearMonth", 
+#          value = "value", 
+#          X2010.01:X2023.11) %>%
+#   mutate(., 
+#          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
+#          metric = "Sale to List Ratio",
+#          type = "Co-Op" ) %>%
+#   filter(., time >= as.Date("2018-11-01")) %>% 
+#   select(., areaName, areaType, Borough, time, type, metric, value)
+# 
+# sale_list_ratio_sf = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/saleListRatio_Sfr.csv", stringsAsFactors = FALSE) %>%
+#   #  #filter(., 
+#   #         areaType == "neighborhood" | areaType == "borough"
+#   #  ) %>%
+#   gather(., 
+#          key = "yearMonth", 
+#          value = "value", 
+#          X2010.01:X2023.11) %>%
+#   mutate(., 
+#          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
+#          metric = "Sale to List Ratio",
+#          type = "Single-Family/Townhouse" ) %>%
+#   filter(., time >= as.Date("2018-11-01")) %>% 
+#   select(., areaName, areaType, Borough, time, type, metric, value)
 
 # Total Inventory
 
-total_inv_all = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/totalInventory_All.csv", stringsAsFactors = FALSE) %>%
-  #  #filter(., 
-  #         areaType == "neighborhood" | areaType == "borough"
-  #  ) %>%
+total_inv_all = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/totalInventory_All.csv", stringsAsFactors = FALSE) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Total Inventory",
          type = "All properties" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-total_inv_condo = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/totalInventory_Condo.csv", stringsAsFactors = FALSE) %>%
-  #  #filter(., 
-  #         areaType == "neighborhood" | areaType == "borough"
-  #  ) %>%
+total_inv_condo = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/totalInventory_Condo.csv", stringsAsFactors = FALSE) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Total Inventory",
          type = "Condo" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-total_inv_coop = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/totalInventory_Coop.csv", stringsAsFactors = FALSE) %>%
-  #  #filter(., 
-  #         areaType == "neighborhood" | areaType == "borough"
-  #  ) %>%
+total_inv_coop = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/totalInventory_Coop.csv", stringsAsFactors = FALSE) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Total Inventory",
          type = "Co-Op" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
-total_inv_sf = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/NYC/Data/totalInventory_Sfr.csv", stringsAsFactors = FALSE) %>%
-  #  #filter(., 
-  #         areaType == "neighborhood" | areaType == "borough"
-  #  ) %>%
+total_inv_sf = read.csv("https://raw.githubusercontent.com/aaronwoodward1/Housing/main/Data/totalInventory_Sfr.csv", stringsAsFactors = FALSE) %>%
   gather(., 
          key = "yearMonth", 
          value = "value", 
-         X2010.01:X2023.09) %>%
+         X2010.01:X2023.11) %>%
   mutate(., 
          time = as.Date(paste(yearMonth, ".01", sep = ""), format = "X%Y.%m.%d"),
          metric = "Total Inventory",
-         type = "Single-Family" ) %>%
-  filter(., time >= as.Date("2014-01-01")) %>% 
+         type = "Single-Family/Townhouse" ) %>%
+  filter(., time >= as.Date("2018-11-01")) %>% 
   select(., areaName, areaType, Borough, time, type, metric, value)
 
 # Creating a larger dataframe "sales_df" by combining all of these smaller dataframes via row bind (rbind) function.
@@ -1095,10 +1077,6 @@ sales_df <- rbind(days_on_mkt_all,
                  median_sales_price_condo,
                  median_sales_price_coop,
                  median_sales_price_sf,
-                 sale_list_ratio_all,
-                 sale_list_ratio_condo,
-                 sale_list_ratio_coop,
-                 sale_list_ratio_sf,
                  price_cut_share_all,
                  price_cut_share_condo,
                  price_cut_share_coop,
@@ -1127,22 +1105,16 @@ sales_sf <- sales_sf %>%
 sales_sf <- sales_sf[order(sales_sf$time, decreasing = TRUE),]
 
 # Ordering the sale property types by factor for the dropdown selection for interactive map and historical plot
-properties <- factor(sales_sf$type, levels = c("All properties", "Condo", "Co-Op", "Single-Family"))
+properties <- factor(sales_sf$type, levels = c("All properties", "Condo", "Co-Op", "Single-Family/Townhouse"))
 
 # Mortgage payment calculation
 
-mort_rate = 0.0785 #Annual rate for 30-year fixed mortgage
-
-
-# median_ask_df <- rbind(median_ask_price_all,
-#                      median_ask_price_condo,
-#                      median_ask_price_coop,
-#                      median_ask_price_sf)
+mort_rate = 0.065 #Annual rate for 30-year fixed mortgage
 
 mortgage_df <- mutate(sales_df, 
                       down_payment = sales_df$value*0.2,
                       monthly_mort_payment = (sales_df$value*.80)*(mort_rate/12)/ (1-((1 + mort_rate/12)^(-360)))) %>%
-  filter(., time == "2023-09-01", metric == "Median Asking Price", !is.na(value)) 
+  filter(., time == "2023-11-01", metric == "Median Asking Price", !is.na(value)) 
 
 # Cleaning time series data
 sales_ts <- median_ask_price_all %>% 
@@ -1157,7 +1129,6 @@ sales_ts <- median_ask_price_all %>%
 #                           SHINY APP                                         #
 #                                                                             #
 ###############################################################################
-
 
 ui <- fluidPage(
   
@@ -1182,7 +1153,7 @@ ui <- fluidPage(
                               selected = "Median Asking Price"),
                   selectInput("date", "Select Date:",
                               choices = unique(sales_sf$time),
-                              selected = "2023-09-01"),
+                              selected = "2023-11-01"),
                
                   h4("For the Historical Plot"),
                   selectizeInput(
@@ -1239,7 +1210,7 @@ ui <- fluidPage(
                     selected = "Median Asking Rent"),
       selectInput("rent_date", "Select Date:",
                  choices = unique(rent_sf$time),
-                 selected = "2023-09-01"),
+                 selected = "2023-11-01"),
     
       h4("For the Historical Plot"),
       selectizeInput(
@@ -1262,14 +1233,12 @@ ui <- fluidPage(
       mainPanel(width = 9,
         fluidRow(column(width = 12, style = "background-color:white;", h4("Interactive Map", align='left'),leafletOutput(outputId = "rent_map", width = 1000, height=350))),
         fluidRow(column(width = 12, style = "background-color:white;", h4("Historical Asking Rent and Rental Inventory Trends", align='left'), plotlyOutput("rent_history_plot"))),
-        fluidRow(column(width = 12, style = "background-color:white;", h4("Affordability of New York City Neighborhoods", align='left'),h5("Affordability is based on the median household income in New York City of $74,694 in 2022. Bubble sizes reflect median asking rent as of September 2023.", align='left'), plotlyOutput("rent_afford_plot"))) #h6("Affordability is based on the median household income in New York City of $74,694 in 2022", align='left'), 
+        fluidRow(column(width = 12, style = "background-color:white;", h4("Affordability of New York City Neighborhoods", align='left'),h5("Affordability is based on the median household income in New York City of $74,694 (U.S. Census Bureau estimate) in 2022. Bubble sizes reflect median asking rent as of November 2023.", align='left'), plotlyOutput("rent_afford_plot"))) #h6("Affordability is based on the median household income in New York City of $74,694 in 2022", align='left'), 
         )
       )
     )
   )
 )
-
-  
 
 server <- function(input, output, session){
   
@@ -1315,7 +1284,7 @@ server <- function(input, output, session){
  
  output$rent_afford_plot <- renderPlotly({
    p <- nyc_rent_afford_df %>%
-     plot_ly(#nyc_rent_afford_df, 
+     plot_ly(
                 x=~Share_hhinc_to_rent, 
                 y=~Rent_inventory, 
                 type = "scatter", 
@@ -1326,20 +1295,13 @@ server <- function(input, output, session){
                 #size = ~Median_ask_rent,
                 size = z,
                 marker = list(opacity = 0.5, sizemode = "diameter"),
-                #hoverinfo = 'text',
                 hovertext = ~I(formatC(z, big.mark = ",",format = "d")),
                 hovertemplate = paste0(
-                  "Neighborhood: %{text}</b><br>",
+                  "Neighborhood/submarket: %{text}</b><br>",
                   "Percent of household income spent on rent: %{x:.1%}<br>",
                   "Total available rental units (Rental inventory): %{y:,.0f}<br>",
                   'Median asking rent: $%{hovertext}'
                 )) %>%
-                #hovertemplate = paste0(
-                #    "<br><br>Neighborhood: ", areaName,"</b><br>",
-                #    "Percent of household income spent on rent: ", percent(Share_hhinc_to_rent),"<br>",
-                #    #"%{yaxis.title.text}: %{y:0,0f}<br>",
-                #    'Median asking rent: $%{z:,.0f}'
-                #    )) %>%
       layout(
              xaxis = list(title = 'Percentage of household income spent on rent', tickformat = ".0%"),
              yaxis = list(title = 'Total available rental units', tickformat = "," ))
@@ -1371,9 +1333,7 @@ server <- function(input, output, session){
                    label = ~paste0(areaName, ": ", prettyNum(value, big.mark = ","))) %>%
                    # label = ~paste0(areaName, ": ", "%{value:$,.0f"})) %>%
        addLegend(pal = pal, values = ~sales_map_data()$value, opacity = 0.65, position = "bottomleft",
-                   title = NULL) #%>%
-       # hovertemplate = paste("%{sales_map_data()$areaName}: %{sales_map_data()$value:$,.0f}")
-     
+                   title = NULL) 
    })
    
    updateSelectizeInput(session = session, 'sales_areaName', choices = unique(sales_df$areaName), selected = "NYC", server = TRUE)
@@ -1391,23 +1351,6 @@ server <- function(input, output, session){
      as.data.frame(filter(mortgage_df, areaName == input$mort_area, type == input$mort_property))
    })
    
-   # output$mortgage <- renderText({
-   #   #mortgage_data() %>%
-   #   paste0("The average monthly 30-year mortgage payment for a ",~mortgage_data()$type ," in ", ~mortgage_data()$areaName, " is ", "$",
-   #          formatC(~mortgage_data()$monthly_mort_payment, format="f", digits=2, big.mark=","))
-   #          }))
-   
-  
-   #payment <- mortgage_data()$monthly_mort_payment
-   
-   # output$mortgage <- renderText({
-   #   #mortgage_data <- mortgage_df %>%
-   #    # filter(., areaName == input$areaName, type == input$mort_property, time == '2023-09-01')
-   #   paste0('The average monthly 30-year mortgage payment for a ',input$mort_property,' in ', input$mort_area, ' is $',#,
-   #        formatC(mortgage_data()$monthly_mort_payment, format="f", digits=2, big.mark=","), ' as of September 2023.')
-   #   
-   # })
-   
    output$mortgage <- renderUI({
      HTML(paste0("<b>",
         "Area: ", input$mort_area,
@@ -1418,7 +1361,7 @@ server <- function(input, output, session){
         "<br>",
         "Estimated down payment: $", formatC(mortgage_data()$down_payment, format="f", digits=2, big.mark=","),
         "<br>",
-        "30-year benchmark mortgage interest rate: ", 7.85,"%",
+        "30-year benchmark mortgage interest rate: ", 6.50,"%",
         "<br>",
         "Estimated monthly payment: $", formatC(mortgage_data()$monthly_mort_payment, format="f", digits=2, big.mark=","),
         "</b>"
@@ -1468,8 +1411,6 @@ server <- function(input, output, session){
        plot_modeltime_forecast(., .title = paste0("12-month listing price forecast for ", input$forecast_area), .facet_scales = "free_y", .legend_show = FALSE)
      #title = paste0("12-month listing price forecast for ", input$forecast_area)
    })
-   
-   
 }
 
 shinyApp(ui, server)
