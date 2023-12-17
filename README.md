@@ -18,14 +18,13 @@ The rental dashboard includes:
 
 ![rental_demo1](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjBtNzE3ZDdhOWg5c2J3NTdrZHo1NXc5b2k4MWdsNG56dWcybWQ3eiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/8fqQX6vHZZCJ37SjT0/giphy.gif) ![rental_demo2](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdDZuZ2tvMzY5YjNucHV6M2ZtYTU5dmJwN2VxZTNvdXV5cGRrd3RjeSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/IUnMcTc1IpQ64thPhy/giphy.gif) ![rental_demo3](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZWNpYW5xc281YTcxbGdsaDRxdmtqYTYzZTFrNDhnNTdsdzhvd2sxNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9TNpbd9Q9IrXP5GC5H/giphy.gif)
 
+The link to this dashboard can be found [here](https://aaronwoodward1.shinyapps.io/StreetEasy_NYC_Housing_Dashboard/)
+
 Future areas of exploration include:
 * Subway stations serving the neighborhoods, as well the time to travel to Midtown Manhattan taking the subway.
 * Schools in the neighborhood
 * Amenities, such as parks, libraries, museums, theaters, grocery stores, restaurants, hospitals and clinics, etc.
 * Neighborhood profile page.
-
-Bugs that need fixing:
-* Clearing invalid mortgage payment calculations (currently being worked on).
 
 The link to the raw data for this app can be found [here](https://streeteasy.com/blog/data-dashboard/[object%20Object]?agg=Total&metric=Inventory&type=Sales&bedrooms=Any%20Bedrooms&property=Any%20Property%20Type&minDate=2010-01-01&maxDate=2023-10-01&area=Flatiron,Brooklyn%20Heights).
 
