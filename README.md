@@ -26,6 +26,9 @@ Future areas of exploration include:
 * Amenities, such as parks, libraries, museums, theaters, grocery stores, restaurants, hospitals and clinics, etc.
 * Neighborhood profile page.
 
+Current debugging issues:
+* Fixing confidence interval (gray-shaded area) feauture for the listing price forecasts.
+
 The link to the raw data for this app can be found [here](https://streeteasy.com/blog/data-dashboard/[object%20Object]?agg=Total&metric=Inventory&type=Sales&bedrooms=Any%20Bedrooms&property=Any%20Property%20Type&minDate=2010-01-01&maxDate=2023-10-01&area=Flatiron,Brooklyn%20Heights).
 
 A special thanks to Siyuan Li (https://github.com/siyuanligit) who developed a similiar web application using StreetEasy data (https://siyuanli.shinyapps.io/REexplorer/), which was a immense help in providing guidance on cleansing the raw data.
