@@ -3,6 +3,11 @@
 #                           NYC NEIGHBORHOOD SHAPEFILE DATA                   #
 #                                                                             #
 ###############################################################################
+
+#Loading libraries
+library(dplyr)
+library(s2)
+
 #Setting working directory
 setwd("/Users/aaronwoodward/Desktop/Datasets/Cities/NYC/Streeteasy_data/Master_report")
 
